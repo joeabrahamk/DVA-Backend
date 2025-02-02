@@ -1,25 +1,22 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
-from app.config import Config
+from flask_jwt_extended import JWTManager
+from .database import Base, engine
+from .models import User, FuelStation, FuelHistory
+from .routes import bp
 
-db = SQLAlchemy()
-migrate = Migrate()
-
-def create_app(config_class=Config):
+def create_app():
     app = Flask(__name__)
-    app.config.from_object(config_class)
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://username:password@localhost/dva_db'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['JWT_SECRET_KEY'] = 'your-secret-key'  # Change this to a secure key
 
-    db.init_app(app)
-    migrate.init_app(app, db)
+    # Initialize database
+    Base.metadata.create_all(bind=engine)
 
-    from app.main import bp as main_bp
-    app.register_blueprint(main_bp)
+    # Initialize JWT
+    jwt = JWTManager(app)
+
+    # Register the Blueprint
+    app.register_blueprint(bp)
 
     return app
-
-from flask import Blueprint
-
-bp = Blueprint('main', __name__)
-
-from app.main import routes, errors
