@@ -1,9 +1,11 @@
+# filepath: /C:/Users/joeab/OneDrive/Desktop/projects/DVA-Backend/app/database.py
+import os
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 # Replace with your PostgreSQL connection string
-SQLALCHEMY_DATABASE_URL = "postgresql://avnadmin:AVNS_vbyTxJckLo1HMnPP2M7@pg-3ab49eb0-d-v-a.f.aivencloud.com:17972/defaultdb?sslmode=require"
+SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL")
 
 # Create the database engine
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
