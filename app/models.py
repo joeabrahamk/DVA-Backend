@@ -1,18 +1,16 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Float, DateTime, Text
 from sqlalchemy.orm import relationship
-from .database import Base
+from app import db
 
 
-class User(Base):
+class User(db.Model):
     __tablename__ = 'users'
-
-    user_id = Column(Integer, primary_key=True, index=True)
-    username = Column(String(50), unique=True, index=True)
-    email = Column(String(100), unique=True, index=True)
-    hashed_password = Column(String(255))
-    avatar_id = Column(Integer, ForeignKey('user_avatars.avatar_id'))
-    is_active = Column(Boolean, default=True)
-    created_at = Column(DateTime, default='CURRENT_TIMESTAMP')
+    user_id = db.Column(db.Integer, primary_key=True, index=True)
+    username = db.Column(db.String(50), unique=True, index=True)
+    email = db.Column(db.String(100), unique=True, index=True)
+    hashed_password = db.Column(db.String(255))
+    avatar_id = db.Column(db.Integer, db.ForeignKey('user_avatars.avatar_id'))
+    is_active = db.Column(db.Boolean, default=True)
+    created_at = db.Column(db.DateTime, default='CURRENT_TIMESTAMP')
 
     # Relationships
     fuel_history = relationship("FuelHistory", back_populates="user")
@@ -20,107 +18,107 @@ class User(Base):
     vehicles = relationship("Vehicle", back_populates="user")
     reviews = relationship("Review", back_populates="user")
 
-class UserAvatar(Base):
+class UserAvatar(db.Model):
     __tablename__ = 'user_avatars'
 
-    avatar_id = Column(Integer, primary_key=True, index=True)
-    avatar_url = Column(String(255), unique=True)
+    avatar_id = db.Column(db.Integer, primary_key=True, index=True)
+    avatar_url = db.Column(db.String(255), unique=True)
 
     # Relationships
     users = relationship("User", back_populates="avatar")
 
-class FuelStation(Base):
+class FuelStation():
     __tablename__ = 'fuel_stations'
 
-    station_id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(100))
-    location = Column(String(255))
-    latitude = Column(Float(precision=6))
-    longitude = Column(Float(precision=6))
-    contact_number = Column(String(15))
-    is_24x7 = Column(Boolean, default=False)
-    created_at = Column(DateTime, default='CURRENT_TIMESTAMP')
+    station_id = db.Column(db.Integer, primary_key=True, index=True)
+    name = db.Column(db.String(100))
+    location = db.Column(db.String(255))
+    latitude = db.Column(db.Float(precision=6))
+    longitude = db.Column(db.Float(precision=6))
+    contact_number = db.Column(db.String(15))
+    is_24x7 = db.Column(db.Boolean, default=False)
+    created_at = db.Column(db.DateTime, default='CURRENT_TIMESTAMP')
 
     # Relationships
     fuel_history = relationship("FuelHistory", back_populates="station")
     fuel_prices = relationship("FuelPrice", back_populates="station")
     reviews = relationship("Review", back_populates="station")
 
-class FuelType(Base):
+class FuelType():
     __tablename__ = 'fuel_types'
 
-    fuel_type_id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(50), unique=True)
+    fuel_type_id = db.Column(db.Integer, primary_key=True, index=True)
+    name = db.Column(db.String(50), unique=True)
 
     # Relationships
     fuel_history = relationship("FuelHistory", back_populates="fuel_type")
     fuel_prices = relationship("FuelPrice", back_populates="fuel_type")
 
-class FuelHistory(Base):
+class FuelHistory():
     __tablename__ = 'fuel_history'
 
-    history_id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey('users.user_id'))
-    station_id = Column(Integer, ForeignKey('fuel_stations.station_id'))
-    fuel_type_id = Column(Integer, ForeignKey('fuel_types.fuel_type_id'))
-    quantity = Column(Float(precision=2))
-    price = Column(Float(precision=2))
-    currency = Column(String(10))
-    date_time = Column(DateTime)
-    created_at = Column(DateTime, default='CURRENT_TIMESTAMP')
+    history_id = db.Column(db.Integer, primary_key=True, index=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    station_id = db.Column(db.Integer, db.ForeignKey('fuel_stations.station_id'))
+    fuel_type_id = db.Column(db.Integer, db.ForeignKey('fuel_types.fuel_type_id'))
+    quantity = db.Column(db.Float(precision=2))
+    price = db.Column(db.Float(precision=2))
+    currency = db.Column(db.String(10))
+    date_time = db.Column(db.DateTime)
+    created_at = db.Column(db.DateTime, default='CURRENT_TIMESTAMP')
 
     # Relationships
     user = relationship("User", back_populates="fuel_history")
     station = relationship("FuelStation", back_populates="fuel_history")
     fuel_type = relationship("FuelType", back_populates="fuel_history")
 
-class FuelPrice(Base):
+class FuelPrice():
     __tablename__ = 'fuel_prices'
 
-    price_id = Column(Integer, primary_key=True, index=True)
-    station_id = Column(Integer, ForeignKey('fuel_stations.station_id'))
-    fuel_type_id = Column(Integer, ForeignKey('fuel_types.fuel_type_id'))
-    price = Column(Float(precision=2))
-    currency = Column(String(10))
-    updated_at = Column(DateTime, default='CURRENT_TIMESTAMP')
+    price_id = db.Column(db.Integer, primary_key=True, index=True)
+    station_id = db.Column(db.Integer, db.ForeignKey('fuel_stations.station_id'))
+    fuel_type_id = db.Column(db.Integer, db.ForeignKey('fuel_types.fuel_type_id'))
+    price = db.Column(db.Float(precision=2))
+    currency = db.Column(db.String(10))
+    updated_at = db.Column(db.DateTime, default='CURRENT_TIMESTAMP')
 
     # Relationships
     station = relationship("FuelStation", back_populates="fuel_prices")
     fuel_type = relationship("FuelType", back_populates="fuel_prices")
 
-class SavedLocation(Base):
+class SavedLocation():
     __tablename__ = 'saved_locations'
 
-    location_id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey('users.user_id'))
-    name = Column(String(50))
-    latitude = Column(Float(precision=6))
-    longitude = Column(Float(precision=6))
-    created_at = Column(DateTime, default='CURRENT_TIMESTAMP')
+    location_id = db.Column(db.Integer, primary_key=True, index=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    name = db.Column(db.String(50))
+    latitude = db.Column(db.Float(precision=6))
+    longitude = db.Column(db.Float(precision=6))
+    created_at = db.Column(db.DateTime, default='CURRENT_TIMESTAMP')
 
     # Relationships
     user = relationship("User", back_populates="saved_locations")
 
-class Vehicle(Base):
+class Vehicle():
     __tablename__ = 'vehicles'
 
-    vehicle_id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey('users.user_id'))
-    name = Column(String(50))
-    fuel_efficiency = Column(Float(precision=2))
+    vehicle_id = db.Column(db.Integer, primary_key=True, index=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    name = db.Column(db.String(50))
+    fuel_efficiency = db.Column(db.Float(precision=2))
 
     # Relationships
     user = relationship("User", back_populates="vehicles")
 
-class Review(Base):
+class Review():
     __tablename__ = 'reviews'
 
-    review_id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey('users.user_id'))
-    station_id = Column(Integer, ForeignKey('fuel_stations.station_id'))
-    rating = Column(Integer)
-    comment = Column(Text)
-    created_at = Column(DateTime, default='CURRENT_TIMESTAMP')
+    review_id = db.Column(db.Integer, primary_key=True, index=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    station_id = db.Column(db.Integer, db.ForeignKey('fuel_stations.station_id'))
+    rating = db.Column(db.Integer)
+    comment = db.Column(db.Text)
+    created_at = db.Column(db.DateTime, default='CURRENT_TIMESTAMP')
 
     # Relationships
     user = relationship("User", back_populates="reviews")
