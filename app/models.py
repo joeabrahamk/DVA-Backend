@@ -1,5 +1,5 @@
+from app import db  # Import db from initialized app
 from sqlalchemy.orm import relationship
-from app import db
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -27,4 +27,23 @@ class UserAvatar(db.Model):
     # Relationship
     users = relationship("User", back_populates="avatar")
 
-# Other models remain the same but ensure all timestamps use db.func.current_timestamp()
+class FuelHistory(db.Model):
+    __tablename__ = 'fuel_history'  # ✅ Fixed table name reference
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)  # ✅ Fixed table name reference
+    fuel_type = db.Column(db.String(50), nullable=False)
+    quantity = db.Column(db.Float, nullable=False)
+    price = db.Column(db.Float, nullable=False)
+    currency = db.Column(db.String(20), nullable=False)
+    date_time = db.Column(db.String(50), nullable=False)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'fuel_type': self.fuel_type,
+            'quantity': self.quantity,
+            'price': self.price,
+            'currency': self.currency,
+            'date_time': self.date_time
+        }
