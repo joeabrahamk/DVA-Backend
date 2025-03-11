@@ -5,7 +5,8 @@
       "src": "run.py",
       "use": "@vercel/python",
       "config": {
-        "includeFiles": ["requirements.txt"]
+        "includeFiles": ["requirements.txt"],
+        "runtime": "python3.9"
       }
     }
   ],
