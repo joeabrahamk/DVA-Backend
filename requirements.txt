@@ -3,3 +3,4 @@ Flask-SQLAlchemy
 Flask-Migrate
 flask_migrate
 flask_cors
+gunicorn

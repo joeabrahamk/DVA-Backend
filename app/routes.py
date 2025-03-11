@@ -96,3 +96,7 @@ def add_fuel_history():
     db.session.add(new_entry)
     db.session.commit()
     return jsonify({'message': 'Fuel history added successfully', 'entry_id': new_entry.id}), 201
+
+@bp.route('/', methods=['GET'])
+def home():
+    return jsonify({'message': 'Welcome to the Fuel Tracker API'}), 200
