@@ -5,6 +5,7 @@ from flask_cors import CORS
 import os
 from dotenv import load_dotenv
 from flask_migrate import Migrate
+import logging
 
 # Load environment variables
 load_dotenv()
@@ -21,6 +22,8 @@ def create_app():
     database_url = os.getenv('DATABASE_URL')
     if not database_url:
         raise ValueError("DATABASE_URL is not set in the environment variables")
+
+    logging.info(f"DATABASE_URL: {database_url}")
 
     app.config['SQLALCHEMY_DATABASE_URI'] = database_url  
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False

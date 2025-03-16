@@ -8,7 +8,7 @@ class User(db.Model):
     email = db.Column(db.String(100), unique=True, index=True)
     name = db.Column(db.String(50))
     age = db.Column(db.Integer)  # Fixed column syntax
-    hashed_password = db.Column(db.String(255))
+    hashed_password = db.Column(db.String(255), nullable=False)
     avatar_id = db.Column(db.Integer, db.ForeignKey('user_avatars.avatar_id'))
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())  # Corrected timestamp
     home_lat = db.Column(db.Float(precision=6))
