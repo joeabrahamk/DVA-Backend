@@ -1,20 +1,15 @@
 {
   "version": 2,
-  "functions": {
-    "run.py": {
-      "runtime": "vercel-python@3.9",
-      "includeFiles": "requirements.txt"
+  "builds": [
+    {
+      "src": "run.py",
+      "use": "@vercel/python"
     }
-  },
+  ],
   "routes": [
     {
       "src": "/(.*)",
       "dest": "run.py"
     }
-  ],
-  "env": {
-    "PIP_NO_CACHE_DIR": "off",
-    "PIP_DISABLE_PIP_VERSION_CHECK": "on",
-    "PIP_DEFAULT_TIMEOUT": "100"
-  }
+  ]
 }
