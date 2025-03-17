@@ -16,14 +16,9 @@
       "dest": "run.py"
     }
   ],
-  "build": {
-    "env": {
-      "PIP_NO_CACHE_DIR": "off",
-      "PIP_DISABLE_PIP_VERSION_CHECK": "on",
-      "PIP_DEFAULT_TIMEOUT": "100"
-    },
-    "commands": [
-      "pip install -r requirements.txt"
-    ]
+  "env": {
+    "PIP_NO_CACHE_DIR": "off",
+    "PIP_DISABLE_PIP_VERSION_CHECK": "on",
+    "PIP_DEFAULT_TIMEOUT": "100"
   }
 }
