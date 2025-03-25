@@ -47,3 +47,61 @@ class FuelHistory(db.Model):
             'currency': self.currency,
             'date_time': self.date_time
         }
+        
+        
+class Clipboard(db.Model):
+    __tablename__ = 'clipboards'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    content = db.Column(db.String(255), nullable=False)
+    created_at = db.Column(db.String(50), nullable=False)  # Corrected from db.string to db.String
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'content': self.content,
+            'created_at': self.created_at
+        }
+
+
+class Savedloc(db.Model):
+    __tablename__ = 'savedlocs'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    location_name = db.Column(db.String(255), nullable=False)
+    lat = db.Column(db.Float(precision=6), nullable=False)
+    long = db.Column(db.Float(precision=6), nullable=False)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'location_name': self.location_name,
+            'lat': self.lat,
+            'long': self.long
+        }
+        
+        
+        
+class Pump(db.Model):
+    __tablename__ = 'pumps'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255), nullable=False)
+    lat = db.Column(db.Float(precision=6), nullable=False)
+    long = db.Column(db.Float(precision=6), nullable=False)
+    price = db.Column(db.Float, nullable=False)
+    fuel_type = db.Column(db.String(50), nullable=False)
+    location_name = db.Column(db.String(255), nullable=False)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'lat': self.lat,
+            'long': self.long,
+            'price': self.price,
+            'fuel_type': self.fuel_type,
+            'location_name': self.location_name
+        }
+        
